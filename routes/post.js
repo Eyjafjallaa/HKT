@@ -17,14 +17,7 @@ router.post('/',decode,upload.array('attachment'),(req,res,next)=>{
             }
             else
                 sql+="UserID ";
-            sql+=",City,County, AptName, State,Context, Type, Price,Address";
-            if(req.body.type=="월세"){
-                sql+=",MonthlyPrice) Values(?,?,?,?,?,?,?,?,?,?)";
-                arr.push(req.body.monthlyprice);
-            }
-            else{ 
-                sql+=") Values(?,?,?,?,?,?,?,?,?)"
-            }    
+            sql+=",City,County, AptName, State,Context, Type, Price,Address) Values(?,?,?,?,?,?,?,?,?)";    
             db.query(sql,arr,(err,result)=>{
                 if(err) reject(err);
                 else resolve(result.insertId);
