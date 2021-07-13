@@ -12,7 +12,7 @@ const tokendecode = (req,res,next) => {
         }    
         req.token = data;
     })
-    next()
+    next();
 }
 
 

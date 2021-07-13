@@ -54,86 +54,130 @@ router.post('/',decode,upload.array('attachment'),(req,res,next)=>{
 })
 
 
-router.get('/user',decode,(req,res,nex)=>{
-    var c=db.query(`SELECT Post.PostID, Price, Address, PhoneNumber,Type,AptName,
-    group_concat(URL ORDER BY ImageID)AS URL
-    FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
-    LEFT JOIN Broker ON Post.brokerID = Broker.ID
-    WHERE state = "uploaded"
-    AND Post.City=? AND Post.County=?
-    GROUP BY Post.PostID 
-    `,[req.query.city,req.query.county],(err,result)=>{
-        if(err){
-            res.status(400).json({err});
-            return; 
-        }
-        for(var x in result){
-            if(result[x].URL!=null)
-                result[x].URL=result[x].URL.split(',')[0];
-        }
+router.get('/user', decode, (req, res, nex) => {
+    const search = () => {
+        const promise = new Promise((resolve, reject) => {
+            db.query(`SELECT Post.PostID, Price, Address, PhoneNumber,Type,AptName,
+                group_concat(URL ORDER BY ImageID)AS URL
+                FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
+                LEFT JOIN Broker ON Post.brokerID = Broker.ID
+                WHERE state = "uploaded"
+                AND Post.City=? AND Post.County=?
+                GROUP BY Post.PostID 
+                `, [req.query.city, req.query.county], (err, result) => {
+                if (err) reject(err)
+                for (var x in result) {
+                    if (result[x].URL != null)
+                        result[x].URL = result[x].URL.split(',')[0];
+                }
+                resolve(result);
+            })
+        })
+        return promise;
+    }
+    const respond = (result)=>{
         res.status(200).json(result);
-    })
+    }
+    const error = (err)=>{
+        res.status(400).json(err);
+    }
+    search()
+    .then(respond)
+    .catch(error);
 })
 
 router.get('/broker',decode,(req,res,nex)=>{
-    var c=db.query(`SELECT Post.PostID, Price, Address, PhoneNumber,Type,AptName,
-    group_concat(URL ORDER BY ImageID)AS URL
-    FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
-    LEFT JOIN Broker ON Post.brokerID = Broker.ID
-    WHERE state = "pending" AND brokerID IS NULL
-    AND Post.City=? AND Post.County=?
-    GROUP BY Post.PostID 
-    `,[req.query.city,req.query.county],(err,result)=>{
-        if(err){
-            res.status(400).json({err});
-            return; 
-        }
-        for(var x in result){
-            if(result[x].URL!=null)
-                result[x].URL=result[x].URL.split(',')[0];
-        }
+    const search = () => {
+        const promise = new Promise((resolve, reject) => {
+            db.query(`SELECT Post.PostID, Price, Address, PhoneNumber,Type,AptName,
+                group_concat(URL ORDER BY ImageID)AS URL
+                FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
+                LEFT JOIN Broker ON Post.brokerID = Broker.ID
+                WHERE state = "pending" AND brokerID IS NULL
+                AND Post.City=? AND Post.County=?
+                GROUP BY Post.PostID 
+                `, [req.query.city, req.query.county], (err, result) => {
+                if (err) reject(err)
+                for (var x in result) {
+                    if (result[x].URL != null)
+                        result[x].URL = result[x].URL.split(',')[0];
+                }
+                resolve(result);
+            })
+        })
+        return promise;
+    }
+    const respond = (result)=>{
         res.status(200).json(result);
-    })
+    }
+    const error = (err)=>{
+        res.status(400).json(err);
+    }
+    search()
+    .then(respond)
+    .catch(error);
 })
 
 router.get('/user/reservated',decode,(req,res,nex)=>{
-    var c=db.query(`SELECT Post.PostID, Price,  Address, PhoneNumber,Type,AptName,
-    group_concat(URL ORDER BY ImageID)AS URL
-    FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
-    LEFT JOIN Broker ON Post.brokerID = Broker.ID
-    WHERE state = "reservated" AND ReservedUserID = ?
-    GROUP BY Post.PostID 
-    `,[req.token.sub],(err,result)=>{
-        if(err){
-            res.status(400).json({err});
-            return; 
-        }
-        for(var x in result){
-            if(result[x].URL!=null)
-                result[x].URL=result[x].URL.split(',')[0];
-        }
+    const search = () => {
+        const promise = new Promise((resolve, reject) => {
+            db.query(`SELECT Post.PostID, Price,  Address, PhoneNumber,Type,AptName,
+                group_concat(URL ORDER BY ImageID)AS URL
+                FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
+                LEFT JOIN Broker ON Post.brokerID = Broker.ID
+                WHERE state = "reservated" AND ReservedUserID = ?
+                GROUP BY Post.PostID 
+                `, [req.query.city, req.query.county], (err, result) => {
+                if (err) reject(err)
+                for (var x in result) {
+                    if (result[x].URL != null)
+                        result[x].URL = result[x].URL.split(',')[0];
+                }
+                resolve(result);
+            })
+        })
+        return promise;
+    }
+    const respond = (result)=>{
         res.status(200).json(result);
-    })
+    }
+    const error = (err)=>{
+        res.status(400).json(err);
+    }
+    search()
+    .then(respond)
+    .catch(error);
 })
 
 router.get('/broker/reservated',decode,(req,res,nex)=>{
-    var c=db.query(`SELECT Post.PostID, Price,  Address, PhoneNumber,Type,AptName,
-    group_concat(URL ORDER BY ImageID)AS URL
-    FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
-    LEFT JOIN Broker ON Post.brokerID = Broker.ID
-    WHERE state = "reservated" AND brokerID =?
-    GROUP BY Post.PostID 
-    `,[req.token.sub],(err,result)=>{
-        if(err){
-            res.status(400).json({err});
-            return; 
-        }
-        for(var x in result){
-            if(result[x].URL!=null)
-                result[x].URL=result[x].URL.split(',')[0];
-        }
+    const search = () => {
+        const promise = new Promise((resolve, reject) => {
+            db.query(`SELECT Post.PostID, Price,  Address, PhoneNumber,Type,AptName,
+                group_concat(URL ORDER BY ImageID)AS URL
+                FROM Post LEFT JOIN Image ON Post.PostID = Image.PostID
+                LEFT JOIN Broker ON Post.brokerID = Broker.ID
+                WHERE state = "reservated" AND brokerID =?
+                GROUP BY Post.PostID 
+                `, [req.query.city, req.query.county], (err, result) => {
+                if (err) reject(err)
+                for (var x in result) {
+                    if (result[x].URL != null)
+                        result[x].URL = result[x].URL.split(',')[0];
+                }
+                resolve(result);
+            })
+        })
+        return promise;
+    }
+    const respond = (result)=>{
         res.status(200).json(result);
-    })
+    }
+    const error = (err)=>{
+        res.status(400).json(err);
+    }
+    search()
+    .then(respond)
+    .catch(error);
 })
 
 router.get('/:postid',decode,(req,res,next)=>{
@@ -163,8 +207,8 @@ router.get('/:postid',decode,(req,res,next)=>{
     const respond = (result)=>{
         res.status(200).json(result);
     }
-    const error = (error)=>{
-        res.status(400).json({error});
+    const error = (err)=>{
+        res.status(400).json(err);
     }
     searchPost()
     .then(substr)
