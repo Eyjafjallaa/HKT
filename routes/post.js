@@ -223,6 +223,13 @@ router.put('/:postid/reserve',decode,(req,res,next)=>{
     })
 })
 
+router.put('/:postid/end',decode,(req,res,next)=>{
+    db.query('UPDATE Post SET State = "????????" WHERE PostID = ?',[req.params.postid],(err,result)=>{
+        if(err)res.status(400).json({err});
+        else res.status(200).json({});
+    })
+})
+
 router.put('/:postid/:price',decode,(req,res,next)=>{
     db.query('Update Post SET brokerID = ? ,State = "pending" ,Price = ? WHERE PostID = ?',
     [req.token.sub,parseInt(req.params.price),parseInt(req.params.postid)],(err,result)=>{
