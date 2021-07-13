@@ -63,12 +63,15 @@ router.get('/user',decode,(req,res,nex)=>{
     AND Post.City=? AND Post.County=?
     GROUP BY Post.PostID 
     `,[req.query.city,req.query.county],(err,result)=>{
-        console.log(c.sql);
+        if(err){
+            res.status(400).json({err});
+            return; 
+        }
         for(var x in result){
             if(result[x].URL!=null)
                 result[x].URL=result[x].URL.split(',')[0];
         }
-        res.json(result);
+        res.status(200).json(result);
     })
 })
 
@@ -81,12 +84,15 @@ router.get('/broker',decode,(req,res,nex)=>{
     AND Post.City=? AND Post.County=?
     GROUP BY Post.PostID 
     `,[req.query.city,req.query.county],(err,result)=>{
-        console.log(c.sql);
+        if(err){
+            res.status(400).json({err});
+            return; 
+        }
         for(var x in result){
             if(result[x].URL!=null)
                 result[x].URL=result[x].URL.split(',')[0];
         }
-        res.json(result);
+        res.status(200).json(result);
     })
 })
 
@@ -98,12 +104,15 @@ router.get('/user/reservated',decode,(req,res,nex)=>{
     WHERE state = "reservated" AND ReservedUserID = ?
     GROUP BY Post.PostID 
     `,[req.token.sub],(err,result)=>{
-        console.log(c.sql);
+        if(err){
+            res.status(400).json({err});
+            return; 
+        }
         for(var x in result){
             if(result[x].URL!=null)
                 result[x].URL=result[x].URL.split(',')[0];
         }
-        res.json(result);
+        res.status(200).json(result);
     })
 })
 
@@ -115,12 +124,15 @@ router.get('/broker/reservated',decode,(req,res,nex)=>{
     WHERE state = "reservated" AND brokerID =?
     GROUP BY Post.PostID 
     `,[req.token.sub],(err,result)=>{
-        console.log(c.sql);
+        if(err){
+            res.status(400).json({err});
+            return; 
+        }
         for(var x in result){
             if(result[x].URL!=null)
                 result[x].URL=result[x].URL.split(',')[0];
         }
-        res.json(result);
+        res.status(200).json(result);
     })
 })
 
