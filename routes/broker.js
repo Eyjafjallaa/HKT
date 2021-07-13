@@ -15,6 +15,7 @@ router.post('/login',(req,res,next)=>{
       if (req.body.pw == result[0].PW) {
         var user = {
           sub: req.body.id,
+          type:"broker",
           iat: new Date().getTime() / 1000
         };
         var token = jwt.sign(user, secret, {

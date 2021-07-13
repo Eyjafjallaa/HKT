@@ -7,6 +7,8 @@ var cors = require('cors');
 
 var brokerRouter = require('./routes/broker');
 var normalRouter = require('./routes/normal');
+var postRouter = require('./routes/post');
+const bodyParser = require('body-parser');
 
 var app = express();
 
@@ -20,11 +22,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/static",express.static(path.join(__dirname, 'static')));
 app.use(cors());
-
+app.use(bodyParser.json());
 
 app.use('/user', normalRouter);
 app.use('/broker', brokerRouter);
-
+app.use('/post', postRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
